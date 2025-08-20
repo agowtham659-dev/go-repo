@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Colorful Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg1: #7C3AED;  /* purple */
+      --bg2: #06B6D4;  /* cyan */
+      --bg3: #10B981;  /* emerald */
+      --card: rgba(255,255,255,0.12);
+      --border: rgba(255,255,255,0.25);
+      --text: #0f172a; /* slate-900 */
+      --text-inv: #ffffff;
+      --accent: #F97316; /* orange */
+      --accent-2: #22D3EE; /* sky */
+      --shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text-inv);
+      background: radial-gradient(1200px 800px at 10% 10%, var(--bg1), transparent 60%),
+                  radial-gradient(1000px 700px at 90% 20%, var(--bg2), transparent 60%),
+                  radial-gradient(1200px 900px at 50% 100%, var(--bg3), transparent 55%),
+                  linear-gradient(135deg, #0ea5e9 0%, #7c3aed 40%, #ef4444 100%);
+      background-attachment: fixed;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+      overflow: hidden;
+    }
+
+    /* Floating color blobs */
+    .blob {
+      position: absolute;
+      inset: auto;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.6;
+      animation: float 16s ease-in-out infinite;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+    .blob.one { width: 380px; height: 380px; left: -100px; top: -100px; background: #22d3ee; animation-delay: -2s; }
+    .blob.two { width: 420px; height: 420px; right: -120px; top: 30vh; background: #a78bfa; animation-delay: -7s; }
+    .blob.three { width: 500px; height: 500px; left: 10vw; bottom: -160px; background: #34d399; animation-delay: -12s; }
+    @keyframes float {
+      0%, 100% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(0,-15px,0) scale(1.05); }
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      padding: 32px 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 24px;
+      backdrop-filter: blur(16px) saturate(140%);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .brand .logo {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: conic-gradient(from 0deg, #f472b6, #60a5fa, #34d399, #f472b6);
+      display: grid; place-items: center; color: #000; font-weight: 800;
+    }
+    h1 { margin: 0; font-size: 28px; letter-spacing: -0.02em; }
+    p.sub { margin: 6px 0 20px; opacity: 0.9; font-weight: 300; }
+
+    form { display: grid; gap: 14px; }
+    .field { position: relative; }
+    label { display: block; font-size: 13px; margin-bottom: 6px; opacity: 0.95; }
+    .control {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 14px; padding: 12px 14px;
+      transition: box-shadow .2s, transform .06s, border-color .2s, background .2s;
+    }
+    .control:focus-within {
+      box-shadow: 0 0 0 4px rgba(34,211,238,0.35);
+      border-color: var(--accent-2);
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-1px);
+    }
+    .control svg { flex: none; opacity: 0.9; }
+    input[type="email"], input[type="password"] {
+      width: 100%;
+      background: transparent; border: none; outline: none; color: var(--text-inv);
+      font-size: 15px; letter-spacing: 0.01em;
+    }
+    .toggle-btn {
+      background: none; border: none; color: inherit; cursor: pointer; opacity: 0.9;
+    }
+
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 4px; }
+    .row a { color: #fff; text-underline-offset: 3px; }
+
+    .btn {
+      margin-top: 8px;
+      width: 100%; padding: 12px 16px; border-radius: 14px; border: 0; cursor: pointer;
+      font-weight: 700; letter-spacing: .02em; color: #0f172a;
+      background: linear-gradient(90deg, #f59e0b, #f97316, #ef4444);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+      transition: transform .06s ease, filter .2s ease;
+    }
+    .btn:hover { filter: brightness(1.05); }
+    .btn:active { transform: translateY(1px); }
+
+    .oauth {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;
+    }
+    .oauth button {
+      padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.12); color: var(--text-inv); font-weight: 600; cursor: pointer;
+      transition: background .2s, transform .06s;
+    }
+    .oauth button:hover { background: rgba(255,255,255,0.18); }
+    .oauth button:active { transform: translateY(1px); }
+
+    .divider { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; margin: 14px 0 4px; opacity: 0.9; }
+    .divider::before, .divider::after { content: ""; height: 1px; background: rgba(255,255,255,0.35); }
+
+    .note { font-size: 12px; opacity: 0.85; margin-top: 12px; }
+
+    .footer { text-align: center; margin-top: 18px; font-size: 13px; opacity: 0.9; }
+
+    /* Reduce motion for users who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+      .blob { animation: none; }
+      .btn, .control { transition: none; }
+    }
+
+    /* Support light mode if desired */
+    @media (prefers-color-scheme: light) {
+      :root { --text-inv: #0f172a; }
+      body { color: var(--text); }
+      .card { background: rgba(255,255,255,0.85); }
+      .control { background: rgba(15,23,42,0.06); border-color: rgba(15,23,42,0.15); }
+      .control:focus-within { box-shadow: 0 0 0 4px rgba(59,130,246,0.25); border-color: #60a5fa; }
+      .oauth button { background: rgba(15,23,42,0.06); border-color: rgba(15,23,42,0.15); color: var(--text); }
+      .row a { color: #0ea5e9; }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob one"></div>
+  <div class="blob two"></div>
+  <div class="blob three"></div>
+
+  <main class="card" role="main" aria-labelledby="title">
+    <div class="brand" aria-hidden="true">
+      <div class="logo" aria-hidden="true">✨</div>
+      <div>
+        <h1 id="title">Welcome back</h1>
+        <p class="sub">Sign in to continue your colorful journey.</p>
+      </div>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <div class="control">
+          <!-- Mail icon -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm0 0l8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="username" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="control">
+          <!-- Lock icon -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10V7a5 5 0 1 1 10 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M12 14v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <input id="password" name="password" type="password" placeholder="••••••••" autocomplete="current-password" minlength="6" required />
+          <button class="toggle-btn" type="button" aria-label="Show password" id="togglePwd">
+            <!-- Eye icon -->
+            <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size: 13px;">
+          <input type="checkbox" id="remember" style="accent-color:#22d3ee; width:16px; height:16px;" />
+          Remember me
+        </label>
+        <a href="#" onclick="alert('Password reset flow goes here.')">Forgot password?</a>
+      </div>
+
+      <button class="btn" type="submit">Sign In</button>
+
+      <div class="divider">or continue with</div>
+      <div class="oauth">
+        <button type="button" onclick="fakeOAuth('Google')">Google</button>
+        <button type="button" onclick="fakeOAuth('GitHub')">GitHub</button>
+      </div>
+
+      <p class="note">By signing in, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+      <div class="footer">Don’t have an account? <a href="#" onclick="alert('Sign up flow goes here.')">Create one</a></div>
+    </form>
+  </main>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const togglePwd = document.getElementById('togglePwd');
+    const eyeIcon = document.getElementById('eyeIcon');
+
+    togglePwd.addEventListener('click', () => {
+      const isPwd = password.type === 'password';
+      password.type = isPwd ? 'text' : 'password';
+      togglePwd.setAttribute('aria-label', isPwd ? 'Hide password' : 'Show password');
+      eyeIcon.innerHTML = isPwd
+        ? '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.5 0-10-7-10-7a19.54 19.54 0 0 1 5.11-5.69M9.9 4.24A10.94 10.94 0 0 1 12 5c6.5 0 10 7 10 7a19.54 19.54 0 0 1-3.22 4.12M1 1l22 22" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>'
+        : '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/>';
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Basic client-side validation
+      const errors = [];
+      if (!email.value.trim() || !email.checkValidity()) {
+        errors.push('Please enter a valid email.');
+      }
+      if (!password.value.trim() || password.value.length < 6) {
+        errors.push('Password must be at least 6 characters.');
+      }
+
+      if (errors.length) {
+        alert(errors.join('\n'));
+        return;
+      }
+
+      // Demo: simulate success
+      const remember = document.getElementById('remember').checked;
+      alert(`Signed in as ${email.value}\nRemember me: ${remember ? 'Yes' : 'No'}`);
+    });
+
+    function fakeOAuth(provider) {
+      alert(provider + ' OAuth flow goes here.');
+    }
+  </script>
+</body>
+</html>
