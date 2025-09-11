@@ -9,7 +9,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 git branch: 'main', url: 'https://github.com/agowtham659-dev/go-repo.git'
-		credentialsId: 'github-pat'
                 sh 'mkdir -p build && cp -r index.html src build/'
                 sshagent(['-----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
